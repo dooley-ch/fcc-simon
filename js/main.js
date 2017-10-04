@@ -17,20 +17,39 @@ define("main", function (require, exports) {
 
     var $ = require("jquery");
     require("semantic");
-    var simon = require("simon");
+    var _simon = require("simon");
 
+    // References to the coloured blocks
     var _redBlock = $("#redBlock");
     var _blueBlock = $("#blueBlock");
     var _greenBlock = $("#greenBlock");
     var _yellowBlock = $("#yellowBlock");
     
+    // Reference to the lable used to display the steps
     var _steps = $("#steps");
 
+    // The music files to be played when the user clicks on a block
     var _redMusic = new Audio("music/simonSound1.mp3");
     var _blueMusic = new Audio("music/simonSound2.mp3");
     var _greenMusic = new Audio("music/simonSound3.mp3");
     var _yellowMusic = new Audio("music/simonSound4.mp3");
     
+    function _playRed() {
+        console.log("Play Red")
+    }
+
+    function _playGreen() {
+        console.log("Play Green");
+    }
+
+    function _playBlue() {
+        console.log("Play Blue");
+    }
+
+    function _playYellow() {
+        console.log("Play Yellow");
+    }
+
     /**
      * Change the block's colour to lighter color
      * 
@@ -95,74 +114,133 @@ define("main", function (require, exports) {
         _yellowBlock.attr("src", "img/yellow.png");
     }
 
+    /**
+     * Changes the colour back to it's original value when the mouse is lifted of the block 
+     * 
+     */
     function _redUp() {
         _changeToRed();
     }
 
+     /**
+     * Changes the colour to lighter value when the mouse is down on the block 
+     * 
+     */
     function _redDown() {
         _changeToLightRed();
         _redMusic.play();
     }
 
+     /**
+     * Indicates to the game engine that the key was pressed
+     * 
+     */
     function _redClick() {
-        console.log("Red clicked");
+        _simon.redPressed();
     }
 
+    /**
+     * Changes the colour back to it's original value when the mouse is lifted of the block 
+     * 
+     */
     function _blueUp() {
         _changeToBlue();
     }
         
+     /**
+     * Changes the colour to lighter value when the mouse is down on the block 
+     * 
+     */
     function _blueDown() {
         _changeToLightBlue();
         _blueMusic.play();
     }
         
+     /**
+     * Indicates to the game engine that the key was pressed
+     * 
+     */
     function _blueClick() {
-        console.log("Blue clicked");
+        _simon.bluePressed();
     }
 
+    /**
+     * Changes the colour back to it's original value when the mouse is lifted of the block 
+     * 
+     */
     function _greenUp() {
         _changeToGreen();
     }
         
+     /**
+     * Changes the colour to lighter value when the mouse is down on the block 
+     * 
+     */
     function _greenDown() {
         _changeToLightGreen();
         _greenMusic.play();
     }
         
+     /**
+     * Indicates to the game engine that the key was pressed
+     * 
+     */
     function _greenClick() {
-        console.log("Green clicked");
+        _simon.greenPressed();
     }
         
+    /**
+     * Changes the colour back to it's original value when the mouse is lifted of the block 
+     * 
+     */
     function _yellowUp() {
         _changeToYellow();
     }
         
+     /**
+     * Changes the colour to lighter value when the mouse is down on the block 
+     * 
+     */
     function _yellowDown() {
         _changeToLightYellow();
         _yellowMusic.play();
     }
         
+     /**
+     * Indicates to the game engine that the key was pressed
+     * 
+     */
     function _yellowClick() {
-        console.log("Yellow clicked");
+        _simon.yellowPressed();
     }
         
+    /**
+     * Switches the game's strict mode on or off
+     * 
+     * @param {object} e Button clicked object 
+     */
     function _strictClick(e) {
-        var checked = "false";
-
         if (e.target.checked) {
-            checked = "true";
+            _simon.setStrictMode(true);
+        } else {
+            _simon.setStrictMode(false);
         }
-
-        console.log("Strict clicked: " + checked);
     }
 
+    /**
+     * Causes the game engine to start the game
+     * 
+     */
     function _startGame() {
-        console.log("Start game");
+        _simon.startGame();
     }
 
+    /**
+     * Causes the game engine to be reset
+     * 
+     */
     function _resetGame() {
-        console.log("Reset game")
+        _simon.resetGame();
     }
 
     /**
@@ -204,6 +282,10 @@ define("main", function (require, exports) {
 
         // Init the steps
         _displaySteps(0);
+
+        // Sets the callbacks
+        _simon.setPlayCallbacks(_playRed, _playGreen, _playBlue, _playYellow);
+        _simon.setDisplayCallback(_displaySteps);
     }
 
     exports.init = function () {
