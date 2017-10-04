@@ -26,6 +26,11 @@ define("main", function (require, exports) {
     
     var _steps = $("#steps");
 
+    var _redMusic = new Audio("music/simonSound1.mp3");
+    var _blueMusic = new Audio("music/simonSound2.mp3");
+    var _greenMusic = new Audio("music/simonSound3.mp3");
+    var _yellowMusic = new Audio("music/simonSound4.mp3");
+    
     /**
      * Change the block's colour to lighter color
      * 
@@ -96,6 +101,7 @@ define("main", function (require, exports) {
 
     function _redDown() {
         _changeToLightRed();
+        _redMusic.play();
     }
 
     function _redClick() {
@@ -108,6 +114,7 @@ define("main", function (require, exports) {
         
     function _blueDown() {
         _changeToLightBlue();
+        _blueMusic.play();
     }
         
     function _blueClick() {
@@ -120,6 +127,7 @@ define("main", function (require, exports) {
         
     function _greenDown() {
         _changeToLightGreen();
+        _greenMusic.play();
     }
         
     function _greenClick() {
@@ -132,6 +140,7 @@ define("main", function (require, exports) {
         
     function _yellowDown() {
         _changeToLightYellow();
+        _yellowMusic.play();
     }
         
     function _yellowClick() {
