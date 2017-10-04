@@ -33,21 +33,34 @@ define("main", function (require, exports) {
     var _blueMusic = new Audio("music/simonSound2.mp3");
     var _greenMusic = new Audio("music/simonSound3.mp3");
     var _yellowMusic = new Audio("music/simonSound4.mp3");
+    var _alarmMusic = new Audio("music/alarm.mp3");
     
-    function _playRed(value) {
-        console.log("Play Red")
+    function _playRed() {
+        _changeToLightRed();
+        _redMusic.play();
+        _changeToRed();
     }
 
-    function _playGreen(value) {
-        console.log("Play Green");
+    function _playGreen() {
+        _changeToLightGreen();
+        _greenMusic.play();
+        _changeToGreen();
     }
 
-    function _playBlue(value) {
-        console.log("Play Blue");
+    function _playBlue() {
+        _changeToLightBlue();
+        _blueMusic.play();
+        _changeToBlue();
     }
 
-    function _playYellow(value) {
-        console.log("Play Yellow");
+    function _playYellow() {
+        _changeToLightYellow();
+        _yellowMusic.play();
+        _changeToYellow();
+    }
+
+    function _playAlarm() {
+        console.log("Play Alarm");
     }
 
     /**
@@ -286,6 +299,7 @@ define("main", function (require, exports) {
         // Sets the callbacks
         _simon.setPlayCallbacks(_playRed, _playGreen, _playBlue, _playYellow);
         _simon.setDisplayCallback(_displaySteps);
+        _simon.setAlarmCallback(_playAlarm);
     }
 
     exports.init = function () {

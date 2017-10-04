@@ -3,8 +3,15 @@ define("simon", function (require, exports) {
     
     var _ = require("lodash");
     
+    // Holds the game steps
+    var _gameSteps = [];
+    var _userSteps = [];
+
     // Flag to indicates if the game is being played in strict mode
     var _strictMode = false;
+
+    // Flag to indicate if the game is running
+    var _gameOn = false;
 
     // Callback references used to get the UI to play the music and flash the colours
     var _playRedCb = null;
@@ -14,6 +21,99 @@ define("simon", function (require, exports) {
 
     // Callback reference to display the number of steps
     var _displaySteps = null;
+
+    // Callback reference to play alarm
+    var _playAlarmCb = null;
+
+    /**
+     * Records a link to the callback to play the alarm
+     * 
+     * @param {any} cb Callback function to play the alarm
+     */
+    function _setAlarmCallback(cb) {
+        _playAlarmCb = cb;
+    }
+
+    /**
+     * Generates a random integer between min and max
+     * 
+     * @param {integer} min 
+     * @param {integer} max 
+     * @returns {integer} random integer
+     */
+    function _getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * Generates a random colour used by the game engine to add
+     * a new step
+     * 
+     * @returns {string} A random colour
+     */
+    function _getRandomColor() {
+        var randInt = _getRandomInt(1, 4);
+        var randColor = "";
+
+        switch (randInt) {
+            case 1:
+                randColor = "Red";
+                break;
+            case 2:
+                randColor = "Green";
+                break;
+            case 3:
+                randColor = "Blue";
+                break;
+            case 4:
+                randColor = "Yellow";
+                break;
+        }
+
+        return randColor;
+    }
+
+    /**
+     * Adds a step to the game
+     * 
+     */
+    function _addGameStep() {
+        var iterations = _getRandomInt(1, 4);
+        var randColour = _getRandomColor();
+
+        for (var i = 0; i < iterations; i++ ) {
+            _gameSteps.push(randColour);
+        }
+
+        _playGameSteps();
+        _displaySteps(_gameSteps.length);
+    }
+
+    /**
+     * Links up to the UI to play music
+     * 
+     */
+    function _playGameSteps() {
+        for (var i = 0; i < _gameSteps.length; i++) {
+            var step = _gameSteps[i];
+
+            if (step === "Red") {
+                _playRedMusic();
+            }
+
+            if (step === "Blue") {
+                _playBlueMusic();
+            }
+
+            if (step === "Green") {
+                _playGreenMusic();
+            }
+
+            if (step === "Yellow") {
+                _playYellowMusic();
+            }
+        }
+    }
 
     /**
      * Plays the music and flashes the colour block a number of times
@@ -83,12 +183,28 @@ define("simon", function (require, exports) {
         _playYellowCb = yellowCb;
     }
 
+    /**
+     * Resets the game 
+     * 
+     */
     function _resetGame() {
-        console.log("Reset game...");
+        if (_gameOn) {
+            _gameSteps = [];
+            _userSteps = [];
+            _displaySteps(0);
+            _gameOn = false;
+        }
     }
 
+    /**
+     * Start the game
+     * 
+     */
     function _startGame() {
-        console.log("Start game...");
+        if (!_gameOn) {
+            _addGameStep();
+            _gameOn = true;
+        }
     }
 
     /**
@@ -98,23 +214,47 @@ define("simon", function (require, exports) {
      */
     function _setStrictMode(value) {
         _strictMode = value;
-        console.log("Strict mode set: " + value);
+        _resetGame();
     }
 
+    function _checkGameState() {
+
+    }
+
+    /**
+     * Records the user's choice and checks that it is in line with the game steps
+     * 
+     */
     function _redPressed() {
-        console.log("Red pressed");
+        _userSteps.push("Red");
+        _checkGameState();
     }
 
+    /**
+     * Records the user's choice and checks that it is in line with the game steps
+     * 
+     */
     function _bluePressed() {
-        console.log("Blue pressed");
+        _userSteps.push("Blue");
+        _checkGameState();
     }
 
+    /**
+     * Records the user's choice and checks that it is in line with the game steps
+     * 
+     */
     function _greenPressed() {
-        console.log("Green pressed");
+        _userSteps.push("Green");
+        _checkGameState();
     }
 
+    /**
+     * Records the user's choice and checks that it is in line with the game steps
+     * 
+     */
     function _yellowPressed() {
-        console.log("Yellow pressed");
+        _userSteps.push("Yellow");
+        _checkGameState();
     }
 
     exports.redPressed = function () {
@@ -143,5 +283,8 @@ define("simon", function (require, exports) {
     }
     exports.setDisplayCallback = function (cb) {
         return _setDisplaySteps(cb)
+    }
+    exports.setAlarmCallback = function (cb) {
+        return _setAlarmCallback(cb);
     }
 });
