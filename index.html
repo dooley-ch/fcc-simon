@@ -13,7 +13,41 @@
     </head>
 
     <body>
-        
+        <section class="ui center aligned container">
+            <h1 class="margin-top-50">Simon!</h1>
+            <h3 id="steps" class="margin-top-50">Steps: 0</h1>
+            <table class="ui basic unstackable small celled table margin-top-30">
+                <tbody>
+                    <tr>
+                        <td class="center aligned mouse-hand game-cell" data-cell="0-0"> 
+                            <img id="redBlock" class="ui fluid image" src="img/red.png" alt="Red">                           
+                        </td>
+                        <td class="center aligned mouse-hand game-cell" data-cell="0-1">
+                            <img id="greenBlock" class="ui fluid image" src="img/green.png" alt="Green">
+                        </td>
+                        <td class="center aligned mouse-hand game-cell" data-cell="0-2">
+                            <img id="yellowBlock" class="ui fluid image" src="img/yellow.png" alt="Yellow">
+                        </td>
+                        <td class="center aligned mouse-hand game-cell" data-cell="1-0">
+                            <img id="blueBlock" class="ui fluid image" src="img/blue.png" alt="Blue">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="ui buttons">
+                <button id="startButton" class="circular ui icon green button mouse-hand">
+                    Start
+                </button>
+                <button id="resetButton" class="circular ui icon red button mouse-hand">
+                    Reset
+                </button>
+            </div>
+            <div class="ui toggle checkbox margin-left-20">
+                <input id="strictButton" type="checkbox" name="public">
+                <label>Strict</label>
+            </div>
+        </section>
+    
         <script data-main="js/main" src="js/require.js"></script>
     </body>
 </html>
