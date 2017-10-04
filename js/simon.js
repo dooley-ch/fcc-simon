@@ -3,13 +3,61 @@ define("simon", function (require, exports) {
     
     var _ = require("lodash");
     
+    // Flag to indicates if the game is being played in strict mode
     var _strictMode = false;
 
+    // Callback references used to get the UI to play the music and flash the colours
     var _playRedCb = null;
     var _playGreenCb = null;
     var _playBlueCb = null;
     var _playYellowCb = null;
+
+    // Callback reference to display the number of steps
     var _displaySteps = null;
+
+    /**
+     * Plays the music and flashes the colour block a number of times
+     * 
+     * @param {int} value The numbe of times this should occur 
+     */
+    function _playRedMusic(value) {
+        if (_.isFunction(_playRedCb)) {
+            _playRedCb(value);
+        }
+    }
+
+    /**
+     * Plays the music and flashes the colour block a number of times
+     * 
+     * @param {int} value The numbe of times this should occur 
+     */
+    function _playGreenMusic(value) {
+        if (_.isFunction(_playGreenCb)) {
+            _playGreenCb();
+        }
+    }
+
+    /**
+     * Plays the music and flashes the colour block a number of times
+     * 
+     * @param {int} value The numbe of times this should occur 
+     */
+    function _playBlueMusic(value) {
+        if (_.isFunction(_playBlueCb)) {
+            _playBlueCb(value);
+        }
+    }
+
+    /**
+     * Plays the music and flashes the colour block a number of times
+     * 
+     * @param {int} value The numbe of times this should occur 
+     */
+    function _playYellowMusic(value) {
+        if (_.isFunction(_playYellowCb)) {
+            _playYellowCb(value);
+        }
+    }
 
     /**
      * Records the callback to display the steps

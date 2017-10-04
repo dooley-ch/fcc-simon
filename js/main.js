@@ -34,19 +34,19 @@ define("main", function (require, exports) {
     var _greenMusic = new Audio("music/simonSound3.mp3");
     var _yellowMusic = new Audio("music/simonSound4.mp3");
     
-    function _playRed() {
+    function _playRed(value) {
         console.log("Play Red")
     }
 
-    function _playGreen() {
+    function _playGreen(value) {
         console.log("Play Green");
     }
 
-    function _playBlue() {
+    function _playBlue(value) {
         console.log("Play Blue");
     }
 
-    function _playYellow() {
+    function _playYellow(value) {
         console.log("Play Yellow");
     }
 
