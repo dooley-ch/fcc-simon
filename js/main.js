@@ -38,25 +38,41 @@ define("main", function (require, exports) {
     function _playRed() {
         _changeToLightRed();
         _redMusic.play();
-        _changeToRed();
+
+        var fn = setInterval(function () {
+            _changeToRed();
+            clearInterval(fn);            
+        }, 300);
     }
 
     function _playGreen() {
         _changeToLightGreen();
         _greenMusic.play();
-        _changeToGreen();
+
+        var fn = setInterval(function () {
+            _changeToGreen();
+            clearInterval(fn);            
+        }, 300);
     }
 
     function _playBlue() {
         _changeToLightBlue();
         _blueMusic.play();
-        _changeToBlue();
+
+        var fn = setInterval(function () {
+            _changeToBlue();
+            clearInterval(fn);            
+        }, 300);
     }
 
     function _playYellow() {
         _changeToLightYellow();
         _yellowMusic.play();
-        _changeToYellow();
+
+        var fn = setInterval(function () {
+            _changeToYellow();
+            clearInterval(fn);            
+        }, 300);
     }
 
     function _playAlarm() {
@@ -254,6 +270,7 @@ define("main", function (require, exports) {
      */
     function _resetGame() {
         _simon.resetGame();
+        _displaySteps(0);
     }
 
     /**
@@ -264,6 +281,37 @@ define("main", function (require, exports) {
     function _displaySteps(value) {
         var valueToDisplay = ("0" + value).slice(-2);
         _steps.text("Steps: " + valueToDisplay);
+    }
+
+    function _playSequence(sequence) {
+        var i = 0;
+
+        var moves = setInterval(function (){
+            var colr = sequence[i];
+
+            if (colr === "Red") {
+                _playRed();
+            }
+
+            if (colr === "Blue") {
+                _playBlue();
+            }
+
+            if (colr === "Green") {
+                _playGreen();
+            }
+
+            if (colr === "Yellow") {
+                _playYellow();
+            }
+
+            i++;
+            if (i >= sequence.length) {
+                clearInterval(moves);
+            }
+        }, 600);
+
+        _displaySteps(sequence.length);
     }
 
     /**
@@ -297,8 +345,7 @@ define("main", function (require, exports) {
         _displaySteps(0);
 
         // Sets the callbacks
-        _simon.setPlayCallbacks(_playRed, _playGreen, _playBlue, _playYellow);
-        _simon.setDisplayCallback(_displaySteps);
+        _simon.setPlaySequenceCallback(_playSequence);
         _simon.setAlarmCallback(_playAlarm);
     }
 

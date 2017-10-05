@@ -13,17 +13,23 @@ define("simon", function (require, exports) {
     // Flag to indicate if the game is running
     var _gameOn = false;
 
-    // Callback references used to get the UI to play the music and flash the colours
-    var _playRedCb = null;
-    var _playGreenCb = null;
-    var _playBlueCb = null;
-    var _playYellowCb = null;
+    // Callback reference used to get the UI to play the music and flash the colours
+    var _playSequenceCb = null;
 
     // Callback reference to display the number of steps
     var _displaySteps = null;
 
     // Callback reference to play alarm
     var _playAlarmCb = null;
+
+    /**
+     * Records a link to the callback to play the sequence
+     * 
+     * @param {any} cb Callback function to play the sequence
+     */
+    function _setPlaySequenceCallback(cb) {
+        _playSequenceCb = cb;
+    }
 
     /**
      * Records a link to the callback to play the alarm
@@ -85,102 +91,9 @@ define("simon", function (require, exports) {
             _gameSteps.push(randColour);
         }
 
-        _playGameSteps();
-        _displaySteps(_gameSteps.length);
-    }
-
-    /**
-     * Links up to the UI to play music
-     * 
-     */
-    function _playGameSteps() {
-        for (var i = 0; i < _gameSteps.length; i++) {
-            var step = _gameSteps[i];
-
-            if (step === "Red") {
-                _playRedMusic();
-            }
-
-            if (step === "Blue") {
-                _playBlueMusic();
-            }
-
-            if (step === "Green") {
-                _playGreenMusic();
-            }
-
-            if (step === "Yellow") {
-                _playYellowMusic();
-            }
+        if (_.isFunction(_playSequenceCb)) {
+            _playSequenceCb(_gameSteps);
         }
-    }
-
-    /**
-     * Plays the music and flashes the colour block a number of times
-     * 
-     * @param {int} value The numbe of times this should occur 
-     */
-    function _playRedMusic(value) {
-        if (_.isFunction(_playRedCb)) {
-            _playRedCb(value);
-        }
-    }
-
-    /**
-     * Plays the music and flashes the colour block a number of times
-     * 
-     * @param {int} value The numbe of times this should occur 
-     */
-    function _playGreenMusic(value) {
-        if (_.isFunction(_playGreenCb)) {
-            _playGreenCb();
-        }
-    }
-
-    /**
-     * Plays the music and flashes the colour block a number of times
-     * 
-     * @param {int} value The numbe of times this should occur 
-     */
-    function _playBlueMusic(value) {
-        if (_.isFunction(_playBlueCb)) {
-            _playBlueCb(value);
-        }
-    }
-
-    /**
-     * Plays the music and flashes the colour block a number of times
-     * 
-     * @param {int} value The numbe of times this should occur 
-     */
-    function _playYellowMusic(value) {
-        if (_.isFunction(_playYellowCb)) {
-            _playYellowCb(value);
-        }
-    }
-
-    /**
-     * Records the callback to display the steps
-     * 
-     * @param {function} cb 
-     */
-    function _setDisplaySteps(cb) {
-        _displaySteps = cb;
-    }
-
-    /**
-     * Records the callbacks for playing music
-     * 
-     * @param {function} redCb Callback to play music
-     * @param {function} greenCb Callback to play music 
-     * @param {function} blueCb Callback to play music 
-     * @param {function} yellowCb Callback to play music 
-     */
-    function _setPlayCallbacks(redCb, greenCb, blueCb, yellowCb) {
-        _playRedCb = redCb;
-        _playGreenCb = greenCb;
-        _playBlueCb = blueCb;
-        _playYellowCb = yellowCb;
     }
 
     /**
@@ -191,7 +104,6 @@ define("simon", function (require, exports) {
         if (_gameOn) {
             _gameSteps = [];
             _userSteps = [];
-            _displaySteps(0);
             _gameOn = false;
         }
     }
@@ -278,13 +190,10 @@ define("simon", function (require, exports) {
     exports.startGame = function () {
         return _startGame();
     }
-    exports.setPlayCallbacks = function (redCb, greenCb, blueCb, yellowCb) {
-        return _setPlayCallbacks(redCb, greenCb, blueCb, yellowCb)
-    }
-    exports.setDisplayCallback = function (cb) {
-        return _setDisplaySteps(cb)
-    }
     exports.setAlarmCallback = function (cb) {
         return _setAlarmCallback(cb);
+    }
+    exports.setPlaySequenceCallback = function (cb) {
+        return _setPlaySequenceCallback(cb);
     }
 });
