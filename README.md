@@ -1,2 +1,2 @@
-# fcc-simon
-FCC Simon
+# Simon Game
+
