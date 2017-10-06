@@ -16,16 +16,36 @@ define("simon", function (require, exports) {
     // Callback reference used to get the UI to play the music and flash the colours
     var _playSequenceCb = null;
 
-    // Callback reference to display the number of steps
-    var _displaySteps = null;
-
     // Callback reference to play alarm
     var _playAlarmCb = null;
+
+    // Callback reference to display the number of steps
+    var _displayStepsCb = null;
+
+    /**
+     * Records a link to the callback to display the number of steps
+     * 
+     * @param {function} cb 
+     */
+    function _setDisplayStepsCallback(cb) {
+        _displayStepsCb = cb;
+    }
+
+    /**
+     * Gets the UI to display the current number of steps
+     * 
+     * @param {int} value 
+     */
+    function _displaySteps(value) {
+        if (_.isFunction(_displayStepsCb)) {
+            _displayStepsCb(value);
+        }
+    }
 
     /**
      * Records a link to the callback to play the sequence
      * 
-     * @param {any} cb Callback function to play the sequence
+     * @param {function} cb Callback function to play the sequence
      */
     function _setPlaySequenceCallback(cb) {
         _playSequenceCb = cb;
@@ -34,7 +54,7 @@ define("simon", function (require, exports) {
     /**
      * Records a link to the callback to play the alarm
      * 
-     * @param {any} cb Callback function to play the alarm
+     * @param {function} cb Callback function to play the alarm
      */
     function _setAlarmCallback(cb) {
         _playAlarmCb = cb;
@@ -129,8 +149,47 @@ define("simon", function (require, exports) {
         _resetGame();
     }
 
+    /**
+     * Check's if the user has followed the sequence correctly
+     * - If not, process the failure
+     * - If so, then add another step
+     * 
+     * @returns {void} 
+     */
     function _checkGameState() {
+        setTimeout(function () {
+            for (var i = 0; i < _userSteps.length; i++) {
+                if (_userSteps[i] != _gameSteps[i]) {
+                    return _processFailure();
+                }
+            }
+            
+            _displaySteps(_gameSteps.length - _userSteps.length);
+    
+            if (_userSteps.length === _gameSteps.length) {
+                _addGameStep();
+            }
+        }, 500);
+    }
 
+    /**
+     * If the user does not play the correct sequence, then
+     * play the alarm and if in strict mode reset the game
+     * 
+     */
+    function _processFailure() {
+        _playAlarm();
+
+        _userSteps = [];
+        _displaySteps(_gameSteps.length);
+
+        if (_strictMode) {
+            _resetGame();
+
+            setTimeout(function () {
+                _addGameStep();
+            }, 800);
+        }
     }
 
     /**
@@ -169,6 +228,16 @@ define("simon", function (require, exports) {
         _checkGameState();
     }
 
+    /**
+     * Get the UI to play the alarm
+     * 
+     */
+    function _playAlarm() {
+        if (_.isFunction(_playAlarmCb)) {
+            _playAlarmCb();
+        }
+    }
+
     exports.redPressed = function () {
         return _redPressed();
     }
@@ -196,4 +265,7 @@ define("simon", function (require, exports) {
     exports.setPlaySequenceCallback = function (cb) {
         return _setPlaySequenceCallback(cb);
     }
+    exports.setDisplayStepsCallback = function (cb) {
+        return _setDisplayStepsCallback(cb);
+    };
 });

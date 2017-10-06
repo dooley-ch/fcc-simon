@@ -33,50 +33,70 @@ define("main", function (require, exports) {
     var _blueMusic = new Audio("music/simonSound2.mp3");
     var _greenMusic = new Audio("music/simonSound3.mp3");
     var _yellowMusic = new Audio("music/simonSound4.mp3");
-    var _alarmMusic = new Audio("music/alarm.mp3");
+    var _alarmMusic = new Audio("music/horn.mp3");
     
+    /**
+     * - Swiches the colour to the light version
+     * - Plays the music
+     * - Switches the colour back to the normal version
+     */
     function _playRed() {
         _changeToLightRed();
         _redMusic.play();
 
-        var fn = setInterval(function () {
+        setTimeout(function () {
             _changeToRed();
-            clearInterval(fn);            
-        }, 300);
+        }, 400);
     }
 
+    /**
+     * - Swiches the colour to the light version
+     * - Plays the music
+     * - Switches the colour back to the normal version
+     */
     function _playGreen() {
         _changeToLightGreen();
         _greenMusic.play();
 
-        var fn = setInterval(function () {
-            _changeToGreen();
-            clearInterval(fn);            
-        }, 300);
+        setTimeout(function () {
+            _changeToGreen();          
+        }, 400);
     }
 
+    /**
+     * - Swiches the colour to the light version
+     * - Plays the music
+     * - Switches the colour back to the normal version
+     */
     function _playBlue() {
         _changeToLightBlue();
         _blueMusic.play();
 
-        var fn = setInterval(function () {
-            _changeToBlue();
-            clearInterval(fn);            
-        }, 300);
+        setTimeout(function () {
+            _changeToBlue();          
+        }, 400);
     }
 
+    /**
+     * - Swiches the colour to the light version
+     * - Plays the music
+     * - Switches the colour back to the normal version
+     */
     function _playYellow() {
         _changeToLightYellow();
         _yellowMusic.play();
 
-        var fn = setInterval(function () {
-            _changeToYellow();
-            clearInterval(fn);            
-        }, 300);
+        setTimeout(function () {
+            _changeToYellow();       
+        }, 400);
     }
 
+    /**
+     * Plays the alarm when called by the game engine
+     * 
+     */
     function _playAlarm() {
-        console.log("Play Alarm");
+        _alarmMusic.play();
     }
 
     /**
@@ -283,6 +303,11 @@ define("main", function (require, exports) {
         _steps.text("Steps: " + valueToDisplay);
     }
 
+    /**
+     * Play's the game sequence as requested from the game engine
+     * 
+     * @param {array} sequence 
+     */
     function _playSequence(sequence) {
         var i = 0;
 
@@ -309,7 +334,7 @@ define("main", function (require, exports) {
             if (i >= sequence.length) {
                 clearInterval(moves);
             }
-        }, 600);
+        }, 800);
 
         _displaySteps(sequence.length);
     }
@@ -347,6 +372,7 @@ define("main", function (require, exports) {
         // Sets the callbacks
         _simon.setPlaySequenceCallback(_playSequence);
         _simon.setAlarmCallback(_playAlarm);
+        _simon.setDisplayStepsCallback(_displaySteps);
     }
 
     exports.init = function () {
